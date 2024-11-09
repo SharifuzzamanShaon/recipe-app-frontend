@@ -10,22 +10,31 @@ const RecipesList = () => {
   const [openDetails, setOpenDetails] = useState(false);
   const [recipeId, setRecipeId] = useState("");
   const [recipes, setRecipes] = useState([]);
-  const [searchInput, setSearchInput] = useState("abc");
-  const [searchQuery, setSearchQuery] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["recipes"],
     queryFn: HttpKit.getTopRecipes,
   });
-
   useEffect(() => {
     if (data) {
       setRecipes(data);
+      console.log("Top recipes loaded:", data);
     }
   }, [data]);
 
-  const handleSearch = () => {
-    setSearchQuery(searchInput);
+  const handleSearch = async () => {
+    if (!searchInput) {
+      setRecipes(data || []); // Reset to top recipes if input is empty
+      return;
+    }
+    try {
+      const result = await HttpKit.searchRecipesByName(searchInput);
+      setRecipes(result);
+      console.log("Search results:", result);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
   };
 
   const handleDetailsOpen = (id) => {
@@ -42,23 +51,23 @@ const RecipesList = () => {
         <h1 className="text-2xl font-bold">Top Recipes</h1>
         {/* Search form */}
         <div>
-          <form action="" className="w-full mt-12">
-            <div className="relative flex p-1 rounded-full bg-white   border border-yellow-200 shadow-md md:p-2">
+          <form
+            action=""
+            className="w-full mt-12"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <div className="relative flex p-1 rounded-full bg-white border border-yellow-200 shadow-md md:p-2">
               <input
                 placeholder="Your favorite food"
-                className="w-full p-4 rounded-full outline-none bg-transparent "
+                className="w-full p-4 rounded-full outline-none bg-transparent"
                 type="text"
-                onChange={(e) =>
-                  setSearchInput((prev) => ({
-                    ...prev,
-                    value: e.target.value,
-                  }))
-                }
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
               <button
-                onClick={() => handleSearch()}
+                onClick={handleSearch}
                 type="button"
-                title="Start buying"
+                title="Start searching"
                 className="ml-auto py-3 px-6 rounded-full text-center transition bg-gradient-to-b from-yellow-200 to-yellow-300 hover:to-red-300 active:from-yellow-400 focus:from-red-400 md:px-12"
               >
                 <span className="hidden text-yellow-900 font-semibold md:block">
@@ -81,7 +90,7 @@ const RecipesList = () => {
             <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3">
               {recipes?.map((recipe) => (
                 <RecipeCard
-                  key={recipe?.id}
+                  key={recipe?.idMeal}
                   recipe={recipe}
                   handleDetailsOpen={handleDetailsOpen}
                 />
