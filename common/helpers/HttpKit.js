@@ -3,12 +3,11 @@ import axios from "axios";
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
 
 const HttpKit = {
-  getAllRecipies: async (page = 1, limit = 2) => {
+  getAllRecipies: async () => {
     try {
-      const offset = (page - 1) * limit;
-      // Make the API call with the calculated offset
+     
       const res = await axios.get(
-        `${BASE_URL}/search.php?s=&page=${page}&limit=${limit}`
+        `${BASE_URL}/search.php?s=`
       );
       return res.data; // Return the data, which you can use in react-query
     } catch (error) {

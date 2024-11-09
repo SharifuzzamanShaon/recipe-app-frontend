@@ -1,64 +1,48 @@
 "use client";
 import HttpKit from "@/common/helpers/HttpKit";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 const AllRecipes = () => {
-  const [recipes, setRecipes] = useState([]);
-  const loaderRef = useRef(null);
-
-  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
-    useInfiniteQuery({
-      queryKey: ["recipes"],
-      queryFn: ({ pageParam = 1 }) => HttpKit.getAllRecipies(pageParam,2), // Fetch 10 recipes per page
-      getNextPageParam: (lastPage) => {
-        // If there are more meals, return the next page number, else return false to stop pagination
-        return lastPage.meals.length > 0 ? lastPage.page + 1 : false;
-      },
-    });
+  const [recipes, setRecipes] = useState([]); // Holds the full list of recipes
+  const [displayedRecipes, setDisplayedRecipes] = useState([]); // Holds the current visible recipes
+  const [visibleCount, setVisibleCount] = useState(8); // Controls how many items to show initially and after each "Load More"
 
   useEffect(() => {
-    if (data) {
-      const allRecipes = data.pages.flatMap((page) => page.meals);
-      setRecipes(allRecipes);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetchingNextPage && hasNextPage) {
-          fetchNextPage(); // Trigger fetch for next page when the loader is in view
-        }
-      },
-      { rootMargin: "200px" }
-    );
-
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
-
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
+    const fetchRecipes = async () => {
+      try {
+        const res = await HttpKit.getAllRecipies(); // Fetch all recipes at once
+        setRecipes(res.meals); // Set the full list
+        setDisplayedRecipes(res.meals.slice(0, visibleCount)); // Set initial visible recipes
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
       }
     };
-  }, [isFetchingNextPage, fetchNextPage, hasNextPage]);
 
-  // Stop requesting if there are no more pages
-  useEffect(() => {
-    if (!hasNextPage) {
-      // Optional: You can unobserve the loader here to stop further requests
-      if (loaderRef.current) {
-        const observer = new IntersectionObserver(() => {});
-        observer.unobserve(loaderRef.current);
-      }
+    fetchRecipes();
+  }, []);
+
+  const loadMoreRecipes = () => {
+    const newVisibleCount = visibleCount + 8;
+    setDisplayedRecipes(recipes.slice(0, newVisibleCount)); // Update displayed recipes to show more
+    setVisibleCount(newVisibleCount); // Update visible count
+  };
+
+  const addToCart = (recipe) => {
+    // Get existing cart items from localStorage or initialize an empty array if none
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // Check if the item is already in the cart
+    const itemInCart = cart.find(item => item.idMeal === recipe.idMeal);
+
+    if (!itemInCart) {
+      // Add the new recipe to the cart array
+      cart.push(recipe);
+      // Save updated cart back to localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${recipe.strMeal} has been added to the cart.`);
+    } else {
+      alert(`${recipe.strMeal} is already in the cart.`);
     }
-  }, [hasNextPage]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center">
@@ -67,7 +51,7 @@ const AllRecipes = () => {
           All Recipes
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-          {recipes?.map((recipe, index) => (
+          {displayedRecipes.map((recipe, index) => (
             <div
               key={index}
               className="recipe-card bg-white border rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
@@ -88,14 +72,28 @@ const AllRecipes = () => {
                 >
                   View Recipe
                 </a>
+                <button
+                  onClick={() => addToCart(recipe)}
+                  className="mt-4 w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition-colors"
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}
         </div>
-        {isFetchingNextPage && (
-          <div className="text-center mt-4 text-gray-500">Loading more...</div>
-        )}
-        <div ref={loaderRef} className="h-12"></div>
+        <div className="text-center mt-4">
+          {visibleCount < recipes.length ? (
+            <button
+              onClick={loadMoreRecipes}
+              className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+            >
+              Load More
+            </button>
+          ) : (
+            <p className="text-gray-500">No more recipes to load</p>
+          )}
+        </div>
       </div>
     </div>
   );
