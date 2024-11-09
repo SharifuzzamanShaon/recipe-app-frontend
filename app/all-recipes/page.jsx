@@ -27,7 +27,22 @@ const AllRecipes = () => {
     setVisibleCount(newVisibleCount); // Update visible count
   };
 
- 
+  const addToCart = (recipe) => {
+    // Get existing cart items from localStorage or initialize an empty array if none
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // Check if the item is already in the cart
+    const itemInCart = cart.find(item => item.idMeal === recipe.idMeal);
+
+    if (!itemInCart) {
+      // Add the new recipe to the cart array
+      cart.push(recipe);
+      // Save updated cart back to localStorage
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${recipe.strMeal} has been added to the cart.`);
+    } else {
+      alert(`${recipe.strMeal} is already in the cart.`);
+    }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center">
