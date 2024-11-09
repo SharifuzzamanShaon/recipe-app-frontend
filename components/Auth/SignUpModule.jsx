@@ -13,7 +13,7 @@ import SignUpPresenter from './SignUpPresenter';
 
 import toast from "react-hot-toast";
 
-const SignUpModule = () => {
+const SignUpModule = ({setAuthRoute}) => {
   const [signUpInfo, setSignUpInfo] = useState({
     username: "",
     phoneNumber: "",
@@ -32,6 +32,7 @@ const SignUpModule = () => {
     event.preventDefault();
     presenter.handleSignUp(signUpInfo);
     setSignUpInfo({ username: "", phoneNumber: "", email: "", password: "" });
+    setAuthRoute("login")
   };
 
   const handleChange = (event) => {

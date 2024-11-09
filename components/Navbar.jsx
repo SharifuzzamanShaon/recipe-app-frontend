@@ -2,21 +2,21 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import AuthModal from "./CustomModal/AuthModal";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [openAuthModal, setAuthModal] = useState(false);
   const [authRoute, setAuthRoute] = useState("");
   const [user, setUser] = useState(null);
-
+  const [refreshNav, setRefreshNav] = useState(false);
   useEffect(() => {
     // Retrieve logged-in user data from localStorage
     const loggedInUser = localStorage.getItem("loggedInUser");
-
     if (loggedInUser) {
       // Parse the stored user data and set the user state
       setUser(JSON.parse(loggedInUser));
     }
-  }, []);
+  }, [refreshNav]);
 
   const handleSignUp = () => {
     setAuthModal(true);
@@ -29,10 +29,18 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // Remove the user data and logged-in status from localStorage
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("isLoggedIn");
     setUser(null); // Clear user state
+    toast.success("Logout Success");
+  };
+
+  const handleLoginSuccess = (loggedInUserData) => {
+    setUser(loggedInUserData);
+    localStorage.setItem("loggedInUser", JSON.stringify(loggedInUserData));
+    localStorage.setItem("isLoggedIn", true);
+    setAuthModal(false);
+    toast.success("Login successful!");
   };
 
   return (
@@ -151,8 +159,11 @@ const Navbar = () => {
           {
             <AuthModal
               authRoute={authRoute}
+              setAuthRoute={setAuthRoute}
               setAuthModal={setAuthModal}
+              // handleLoginSuccess={handleLoginSuccess}
               openAuthModal={openAuthModal}
+              setRefreshNav={setRefreshNav}
             />
           }
         </div>

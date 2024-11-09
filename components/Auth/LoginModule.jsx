@@ -5,7 +5,7 @@ import { Button, Input, InputLabel } from "@mui/material";
 import { BiHide, BiShow } from "react-icons/bi";
 import toast from "react-hot-toast";
 
-const LoginModule = ({ setAuthModal }) => {
+const LoginModule = ({ setAuthModal,setRefreshNav }) => {
   const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,13 +30,19 @@ const LoginModule = ({ setAuthModal }) => {
         user.email === loginInfo.email && user.password === loginInfo.password
     );
     console.log(user);
-    
     if (user) {
+      // Check cart data in localStorage
+      const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+      // Add cartData to the user object
+      const userWithCartInfo = {
+        ...user, // Spread the existing user data
+        cartInfo: cartData, // Add cart info
+      };
       localStorage.setItem("isLoggedIn", true); // Flag for logged-in status
-      localStorage.setItem("loggedInUser", JSON.stringify(user)); // Store user info
+      localStorage.setItem("loggedInUser", JSON.stringify(userWithCartInfo)); // Store user info
       toast.success("Login successful!");
+      setRefreshNav(true)
       setAuthModal(false);
-      // Redirect the user or perform other actions
     } else {
       toast.error("Invalid email or password.");
     }

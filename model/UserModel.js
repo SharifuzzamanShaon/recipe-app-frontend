@@ -12,7 +12,6 @@ export default class UserModel {
     localStorage.setItem("users", JSON.stringify(users));
   }
 
-  // Validate user data
   static validate(userData) {
     const { username, phoneNumber, email, password } = userData;
 
@@ -20,19 +19,14 @@ export default class UserModel {
     if (!username || !phoneNumber || !email || !password) {
       return "All fields are required";
     }
-
-    // Check username length
     if (username.length < 3) {
       return "Username must be at least 3 characters long";
     }
-
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Invalid email format";
     }
-
-    // Validate phone number (basic format: only digits and length 10-15)
     const phoneRegex = /^\d{10,15}$/;
     if (!phoneRegex.test(phoneNumber)) {
       return "Phone number must be 10-15 digits";

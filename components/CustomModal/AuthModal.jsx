@@ -21,7 +21,7 @@ const style = {
   p: 4,
 };
 
-export default function AuthModal({authRoute, openAuthModal, setAuthModal }) {
+export default function AuthModal({authRoute,setAuthRoute, openAuthModal, setAuthModal,setRefreshNav }) {
   return (
     <div>
       <Modal
@@ -47,10 +47,12 @@ export default function AuthModal({authRoute, openAuthModal, setAuthModal }) {
               <span className="text-xl">&times;</span>
             </button>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Text in a modal
+              
+            {authRoute ==="login" && "Login Now"}
+              {authRoute ==="signup" && "Sign-Up"}
             </Typography>
-            {authRoute === "login" && <LoginModule  setAuthModal={setAuthModal}/>}
-            {authRoute === "signup" && <SignUpModule setAuthModal={setAuthModal}/>}
+            {authRoute === "login" && <LoginModule  setAuthModal={setAuthModal} setRefreshNav={setRefreshNav}/>}
+            {authRoute === "signup" && <SignUpModule setAuthModal={setAuthModal} setAuthRoute={setAuthRoute}/>}
             {/* Close Button */}
           </Box>
         </Fade>
