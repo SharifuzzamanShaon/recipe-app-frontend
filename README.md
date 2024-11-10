@@ -56,12 +56,3 @@ The `getRecipeDetails` function is mixing `async/await` and `.then` syntax, whic
 This solution properly handles asynchronous operations and ensures that the recipe details are retrieved correctly.
 
 ---
-
-### Notes
-- Remember to handle errors and unexpected data to enhance user experience and app stability.
-- Clean up and remove unused components for optimized performance.
-
----
-
-## License
-This project is open-source and licensed under the MIT License.
