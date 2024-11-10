@@ -5,10 +5,7 @@ const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
 const HttpKit = {
   getAllRecipies: async () => {
     try {
-     
-      const res = await axios.get(
-        `${BASE_URL}/search.php?s=`
-      );
+      const res = await axios.get(`${BASE_URL}/search.php?s=`);
       return res.data; // Return the data, which you can use in react-query
     } catch (error) {
       console.log("Error to fetch All recipes:", error);
@@ -51,11 +48,9 @@ const HttpKit = {
 
   getRecipeDetails: async (id) => {
     try {
-      const response = axios
-        .get(`${BASE_URL}/lookup.php`, {
-          params: { i: id },
-        })
-        .then((res) => res);
+      const response = await axios.get(`${BASE_URL}/lookup.php`, {
+        params: { i: id },
+      });
       return response.data.meals ? response.data.meals[0] : null;
     } catch (error) {
       console.error("Error fetching recipe details:", error);
