@@ -8,7 +8,7 @@ const SingleRecipe = ({ recipeId, setIsOpen }) => {
     queryKey: ["recipe-details"],
     queryFn: () => HttpKit.getRecipeDetails(recipeId),
   });
-  
+
   console.log("Recipe details:", data);
   if (error) return "Error loading recipe details";
   if (isLoading) return "Loading...";
@@ -25,19 +25,25 @@ const SingleRecipe = ({ recipeId, setIsOpen }) => {
           alt={data?.strMeal}
         />
       </div>
-      <h2 className="text2xl font-semibold">{data?.strMeal}</h2>
+      <h2 className="text-3xl font-semibold text-[#713f12]">{data?.strMeal}</h2>
       <p className="text-lg">
         {data?.strCategory} - {data?.strArea}
       </p>
       <p>{data?.strInstructions}</p>
-      <div>
-        <h3 className="font-semibold">Ingredients:</h3>
-        <ul>
+      <div className="p-4">
+        <h3 className="font-semibold text-xl mb-3">Ingredients:</h3>
+        <ul className="flex flex-wrap gap-3">
           {Object.keys(data)
             .filter((key) => key.startsWith("strIngredient") && data[key])
             .map((key, index) => (
-              <li key={index}>
-                {data[key]} - {data[`strMeasure${index + 1}`]}
+              <li
+                key={index}
+                className="bg-[#fde047] p-2 rounded-lg shadow-md flex items-center justify-between w-full sm:w-auto"
+              >
+                <span className="font-semibold">{data[key]}</span> -{" "}
+                <span className="text-gray-600">
+                  {data[`strMeasure${index + 1}`]}
+                </span>
               </li>
             ))}
         </ul>
@@ -47,7 +53,7 @@ const SingleRecipe = ({ recipeId, setIsOpen }) => {
           href={data?.strYoutube}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#fde047] bg-[#713f12] px-4 py-2 rounded-md hover:bg-[#5d2c0b] transition-colors duration-200"
+          className="text-[#fde047] bg-[#713f12] px-2 py-2 rounded-md hover:bg-[#5d2c0b] transition-colors duration-200"
         >
           Watch the recipe video on YouTube
         </a>
