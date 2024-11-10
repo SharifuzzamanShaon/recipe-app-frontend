@@ -21,7 +21,6 @@ const RecipesList = () => {
       setRecipes(data);
     }
   }, [data]);
-    console.log("Top recipes loaded:", data);
 
   const handleSearch = async () => {
     if (!searchInput) {
@@ -31,7 +30,6 @@ const RecipesList = () => {
     try {
       const result = await HttpKit.searchRecipesByName(searchInput);
       setRecipes(result);
-      console.log("Search results:", result);
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -40,11 +38,20 @@ const RecipesList = () => {
   const handleDetailsOpen = (id) => {
     setOpenDetails(true);
     setRecipeId(id);
-    console.log("Recipe ID:", recipeId);
   };
 
-  if (isLoading) return <div>Loading recipes...</div>;
-  if (error) return <div>Error loading recipes: {error.message}</div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading recipes...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Error loading recipes: {error.message}
+      </div>
+    );
 
   return (
     <div className="bg-gray-50 py-10">
@@ -102,8 +109,11 @@ const RecipesList = () => {
       </div>
 
       {/* Modal*/}
-      <Modal isOpen={openDetails} setIsOpen={setOpenDetails} recipeId={recipeId}>
-      </Modal>
+      <Modal
+        isOpen={openDetails}
+        setIsOpen={setOpenDetails}
+        recipeId={recipeId}
+      ></Modal>
     </div>
   );
 };

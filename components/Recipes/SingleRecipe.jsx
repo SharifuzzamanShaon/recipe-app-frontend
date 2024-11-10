@@ -9,7 +9,6 @@ const SingleRecipe = ({ recipeId, setIsOpen }) => {
     queryFn: () => HttpKit.getRecipeDetails(recipeId),
   });
 
-  console.log("Recipe details:", data);
   if (error) return "Error loading recipe details";
   if (isLoading) return "Loading...";
   return (
@@ -17,15 +16,17 @@ const SingleRecipe = ({ recipeId, setIsOpen }) => {
       <div className="flex justify-end">
         <button onClick={() => setIsOpen(false)}>Close</button>
       </div>
-      <div>
+      <div className="flex justify-center items-center">
         <Image
+        className="rounded-lg shadow-lg border-4"
           src={data?.strMealThumb}
-          width={400}
-          height={400}
+          width={300}
+          height={300}
           alt={data?.strMeal}
         />
       </div>
       <h2 className="text-3xl font-semibold text-[#713f12]">{data?.strMeal}</h2>
+      <div className="border-t-2 border-t-[#fde047] my-4"></div>
       <p className="text-lg">
         {data?.strCategory} - {data?.strArea}
       </p>
