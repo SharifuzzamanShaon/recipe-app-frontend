@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -40,7 +41,9 @@ const Cart = () => {
                 className="bg-white shadow-lg rounded-lg p-4 flex flex-col md:flex-row items-center justify-between gap-4 hover:shadow-xl transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <img
+                  <Image
+                    width={100}
+                    height={100}
                     src={item.strMealThumb}
                     alt={item.strMeal}
                     className="w-24 h-24 rounded-md object-cover"

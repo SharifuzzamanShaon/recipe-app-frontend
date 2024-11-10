@@ -1,6 +1,7 @@
 "use client";
 import HttpKit from "@/common/helpers/HttpKit";
 import { addToCart } from "@/utils/ItemAddToCart";
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 const AllRecipes = () => {
@@ -39,7 +40,9 @@ const AllRecipes = () => {
               key={index}
               className="recipe-card bg-white border rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
-              <img
+              <Image
+                width={100}
+                height={100}
                 src={recipe.strMealThumb}
                 alt={recipe.strMeal}
                 className="w-full h-40 object-cover rounded-t-lg"
