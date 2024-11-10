@@ -19,9 +19,9 @@ const RecipesList = () => {
   useEffect(() => {
     if (data) {
       setRecipes(data);
-      console.log("Top recipes loaded:", data);
     }
   }, [data]);
+    console.log("Top recipes loaded:", data);
 
   const handleSearch = async () => {
     if (!searchInput) {
@@ -40,6 +40,7 @@ const RecipesList = () => {
   const handleDetailsOpen = (id) => {
     setOpenDetails(true);
     setRecipeId(id);
+    console.log("Recipe ID:", recipeId);
   };
 
   if (isLoading) return <div>Loading recipes...</div>;
@@ -101,8 +102,7 @@ const RecipesList = () => {
       </div>
 
       {/* Modal*/}
-      <Modal isOpen={openDetails} setIsOpen={setOpenDetails}>
-        <SingleRecipe id={recipeId} setIsOpen={setOpenDetails} />
+      <Modal isOpen={openDetails} setIsOpen={setOpenDetails} recipeId={recipeId}>
       </Modal>
     </div>
   );

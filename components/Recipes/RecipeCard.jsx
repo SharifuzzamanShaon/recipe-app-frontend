@@ -2,8 +2,7 @@ import Image from "next/image";
 import React from "react";
 
 const RecipeCard = ({ recipe, handleDetailsOpen }) => {
-console.log(recipe);
-
+  console.log(recipe);
 
   return (
     <div
@@ -23,13 +22,11 @@ console.log(recipe);
       <h3 className="text-2xl font-semibold text-gray-800">
         {recipe?.strMeal}
       </h3>
-      <p>
-        Obcaecati, quam? Eligendi, nulla numquam natus laborum porro at cum,
-        consectetur ullam tempora ipsa iste officia sed officiis! Incidunt ea
-        animi officiis.
-      </p>
+      <p>{recipe.strInstructions ? recipe.strInstructions?.slice(0, 50) + "..." : ""}</p>
       <div className="relative mx-auto flex items-center justify-center invisible  group-hover:visible">
-        <button className="text-primary">Click to see details</button>
+        <button className="mt-4 w-full px-4 py-2 bg-yellow-500 text-white rounded-lg font-semibold transition-colors">
+          Click to see details
+        </button>
       </div>
     </div>
   );
