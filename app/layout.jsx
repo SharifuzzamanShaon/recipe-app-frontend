@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
         </TanstackProvider>
-        <Toaster position="bottom-left" reverseOrder={false} />
+        <Toaster position="bottom-right" reverseOrder={false} />
       </body>
     </html>
   );
