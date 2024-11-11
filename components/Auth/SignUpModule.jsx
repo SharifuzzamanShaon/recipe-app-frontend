@@ -1,19 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
-import {
-  Button,
-  FormHelperText,
-  Input,
-  InputLabel,
-  Stack,
-} from "@mui/material";
+import { Button, FormHelperText, Input, InputLabel } from "@mui/material";
 import { BiHide, BiShow } from "react-icons/bi";
-import SignUpPresenter from './SignUpPresenter';
-
+import SignUpPresenter from "./SignUpPresenter";
 import toast from "react-hot-toast";
 
-const SignUpModule = ({setAuthRoute}) => {
+const SignUpModule = ({ setAuthRoute }) => {
   const [signUpInfo, setSignUpInfo] = useState({
     username: "",
     phoneNumber: "",
@@ -21,18 +14,24 @@ const SignUpModule = ({setAuthRoute}) => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   const presenter = new SignUpPresenter({
     showError: (msg) => setMessage(msg),
     showSuccess: (msg) => setMessage(msg),
   });
+ 
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    presenter.handleSignUp(signUpInfo);
-    setSignUpInfo({ username: "", phoneNumber: "", email: "", password: "" });
-    setAuthRoute("login")
+    const res = presenter.handleSignUp(signUpInfo);
+    if (res === true) {
+      toast.success("Sign-up successful!, Please login to continue");
+      setAuthRoute("login");
+      setSignUpInfo({ username: "", phoneNumber: "", email: "", password: "" });
+    } else {
+      toast.error(message);
+    }
   };
 
   const handleChange = (event) => {
@@ -61,7 +60,7 @@ const SignUpModule = ({setAuthRoute}) => {
             required
           />
         </FormControl>
-        
+
         <FormControl fullWidth variant="outlined">
           <InputLabel htmlFor="email">Email address</InputLabel>
           <Input
@@ -74,7 +73,7 @@ const SignUpModule = ({setAuthRoute}) => {
             required
           />
         </FormControl>
-        
+
         <FormControl fullWidth variant="outlined">
           <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
           <Input
@@ -87,7 +86,7 @@ const SignUpModule = ({setAuthRoute}) => {
             required
           />
         </FormControl>
-        
+
         <div>
           <FormControl fullWidth variant="outlined">
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -118,14 +117,12 @@ const SignUpModule = ({setAuthRoute}) => {
             </FormHelperText>
           </FormControl>
         </div>
-        
+
         <div className="w-full mt-5">
           <Button type="submit" variant="contained" color="primary">
             Sign Up
           </Button>
         </div>
-        
-        {message && <p className="text-red-500 text-center">{message}</p>}
       </form>
     </>
   );

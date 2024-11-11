@@ -1,5 +1,5 @@
-// presenters/SignUpPresenter.js
-import UserModel from '../../model/UserModel';
+// SignUp Presenter
+import UserModel from "../../model/UserModel";
 
 export default class SignUpPresenter {
   constructor(view) {
@@ -14,6 +14,7 @@ export default class SignUpPresenter {
     }
 
     UserModel.saveUserData(userData);
-    this.view.showSuccess("Sign-up successful!");
+    this.view.showSuccess({ success: true, message: "Sign-up successful!" });
+    return true;
   }
 }

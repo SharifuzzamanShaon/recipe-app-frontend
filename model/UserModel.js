@@ -1,14 +1,11 @@
-// models/UserModel.js
+// models 
 export default class UserModel {
-  // Save user data to localStorage
   static saveUserData(userData) {
-    // Retrieve existing users from localStorage or initialize an empty array if none exist
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    // Add new user to the users array
     users.push(userData);
 
-    // Save the updated users array back to localStorage
+    // Save the updated users to localStorage
     localStorage.setItem("users", JSON.stringify(users));
   }
 
@@ -32,15 +29,13 @@ export default class UserModel {
       return "Phone number must be 10-15 digits";
     }
 
-    // Check password length
     if (password.length < 6) {
       return "Password must be at least 6 characters long";
     }
 
-    return null; // No errors
+    return null; 
   }
 
-  // Retrieve all users
   static getAllUsers() {
     return JSON.parse(localStorage.getItem("users")) || [];
   }

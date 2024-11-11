@@ -31,14 +31,13 @@ const LoginModule = ({ setAuthModal,setRefreshNav }) => {
     );
     console.log(user);
     if (user) {
-      // Check cart data in localStorage
       const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-      // Add cartData to the user object
+      
       const userWithCartInfo = {
-        ...user, // Spread the existing user data
-        cartInfo: cartData, // Add cart info
+        ...user, 
+        cartInfo: cartData, 
       };
-      localStorage.setItem("isLoggedIn", true); // Flag for logged-in status
+      localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("loggedInUser", JSON.stringify(userWithCartInfo)); // Store user info
       toast.success("Login successful!");
       setRefreshNav(true)
