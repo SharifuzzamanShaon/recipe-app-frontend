@@ -59,8 +59,8 @@
       }
     }
     ```
-
-### 4. Not Found Page
+### Some minor issues 
+### 4. Not Found Page 
 - **Fix**: Added a custom "Not Found" page to handle 404 errors, which is displayed when users navigate to a non-existent route.
 
 ## Time Estimates
